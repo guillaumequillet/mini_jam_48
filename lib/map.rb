@@ -4,7 +4,8 @@ class Map
   end
 
   def draw
-    @desk ||= ObjModel.new('desk', true)
+    @desk    ||= ObjModel.new('desk', true)
+    @monitor ||= ObjModel.new('monitor')
     @tileset ||= GLTexture.load_tiles('gfx/tileset.png', 16, 16)
     
     w, l = 5, 5
@@ -33,5 +34,6 @@ class Map
 
 
     @desk.draw(0, 0, 0)  
+    @monitor.draw(18, 10.5, 4)
   end
 end
