@@ -1,7 +1,3 @@
-# MINI JAM 48
-# Theme : Team Work
-# Limitation : The player(s) can not attack!
-
 require 'gosu'
 
 class Window < Gosu::Window
