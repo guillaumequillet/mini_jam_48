@@ -1,22 +1,15 @@
 require 'gosu'
+require 'opengl'
+require 'glu'
 
-class Window < Gosu::Window
-  def initialize
-    super(640, 480, false)
-    self.caption = 'MINI JAM 48'
-  end
+OpenGL.load_lib
+GLU.load_lib
 
-  def button_down(id)
-    close! if id == Gosu::KB_ESCAPE
-  end
+include OpenGL, GLU
 
-  def update
-
-  end
-
-  def draw
-
-  end
-end
+require_relative 'lib/obj_loader.rb'
+require_relative 'lib/hero.rb'
+require_relative 'lib/map.rb'
+require_relative 'lib/window.rb'
 
 Window.new.show
