@@ -7,6 +7,7 @@ GLU.load_lib
 
 include OpenGL, GLU
 
+require_relative 'lib/utils.rb'
 require_relative 'lib/obj_loader.rb'
 require_relative 'lib/hero.rb'
 require_relative 'lib/map.rb'

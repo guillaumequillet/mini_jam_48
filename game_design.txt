@@ -19,4 +19,14 @@ pathfinding ?
 
 maps faites sous images
 
+reste à modéliser :
+armoires
+plantes
+poteaux
+chaise
+
+reste à texturer :
+murs 
+paravents
+
 

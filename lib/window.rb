@@ -7,7 +7,7 @@ class Window < Gosu::Window
 
     @hero = Hero.new
 
-    @map = Map.new
+    @map = Map.new('test')
   end
 
   def needs_cursor?; true; end

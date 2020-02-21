@@ -10,7 +10,7 @@ class Camera
     @t_y      = 0
     @t_z      = 0
     @fovy     = 45
-    @distance = 96
+    @distance = 128
     @near     = 1
     @far      = 1000
     @angle    = 90

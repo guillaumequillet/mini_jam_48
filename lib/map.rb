@@ -1,12 +1,12 @@
 class Map
-  def initialize
-
+  def initialize(filename)
+    @tileset ||= GLTexture.load_tiles('gfx/tileset.png', 16, 16)
+    @wallset ||= GLTexture.load_tiles('gfx/wallset.png', 16, 48)
   end
 
   def draw
     @desk    ||= ObjModel.new('desk', true)
     @monitor ||= ObjModel.new('monitor')
-    @tileset ||= GLTexture.load_tiles('gfx/tileset.png', 16, 16)
     
     w, l = 5, 5
     glBindTexture(GL_TEXTURE_2D, @tileset[1].get_id)
