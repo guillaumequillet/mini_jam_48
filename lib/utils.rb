@@ -4,7 +4,7 @@ class Gosu::Image
       return nil
     else
       @blob ||= self.to_blob
-      result = @blob[(y * gosu_image.width + x) * 4, 4].unpack("C*")
+      result = @blob[(y * self.width + x) * 4, 4].unpack("C*")
       return Gosu::Color.new(result[3], result[0], result[1], result[2])
     end   
   end

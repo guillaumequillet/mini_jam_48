@@ -24,6 +24,7 @@ armoires
 plantes
 poteaux
 chaise
+boite carton à la MGS
 
 reste à texturer :
 murs 
