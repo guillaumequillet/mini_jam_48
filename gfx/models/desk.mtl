@@ -4,3 +4,6 @@
 newmtl desk
 d 1.0
 map_Kd desk.png
+newmtl monitor
+d 1.0
+map_Kd monitor.png

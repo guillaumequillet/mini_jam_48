@@ -3,9 +3,8 @@ class Map
     @tileset = GLTexture.load_tiles('gfx/tileset.png', 16, 16)
     @wallset = GLTexture.load_tiles('gfx/wallset.png', 16, 48)
 
-    @models = {
-      desk:    ObjModel.new('desk', true),
-      monitor: ObjModel.new('monitor')
+    @assets = {
+      desk:    ObjModel.new('desk', true)
     }
 
     read_file(filename)
@@ -14,12 +13,21 @@ class Map
   def read_file(filename)
     transparent_color = Gosu::Color.new(255, 255, 0, 255)
     @tiles = []
+    @models = []
     @minimap = Gosu::Image.new("maps/#{filename}.png", retro: true)
     @minimap.height.times do |y|
       @minimap.width.times do |x|
         color = @minimap.get_pixel(x, y)
+        tile = nil
         unless color == transparent_color
-          @tiles[y * @minimap.width + x] = 0
+          case color
+          when Gosu::Color.new(255, 255, 255, 255)
+            tile = 1
+          when Gosu::Color::GREEN
+            tile = 1
+            @models.push [:desk, x, y]
+          end
+          @tiles[y * @minimap.width + x] = tile
         end
       end
     end
@@ -66,5 +74,9 @@ class Map
     end
 
     glCallList(@display_list)
+    @models.each do |model|
+      shape, x, z = *model
+      @assets[shape].draw(x * @tileset[0].width, 0, z * @tileset[0].height)
+    end
   end
 end
