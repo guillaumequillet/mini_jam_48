@@ -13,4 +13,5 @@ require_relative 'lib/map.rb'
 require_relative 'lib/camera.rb'
 require_relative 'lib/window.rb'
 
+
 Window.new.show

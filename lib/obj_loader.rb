@@ -1,12 +1,13 @@
 class ObjModel
-  def initialize(filename)
-    @vertices = Array.new
-    @vertices_texture = Array.new
-    @vertices_normal = Array.new
-    @faces = Hash.new
+  def initialize(filename, has_transparency = false)
+    @has_transparency = has_transparency
+    @vertices         = []
+    @vertices_texture = []
+    @vertices_normal  = []
+    @faces            = Hash.new
 
     File.open("gfx/models/#{filename}.obj", 'r').readlines.each do |line|
-      line = line.chomp
+      line  = line.chomp
       infos = line.split(' ')
 
       case infos[0]
@@ -40,6 +41,10 @@ class ObjModel
   end
 
   def draw(x = 0, y = 0, z = 0)
+    if (@has_transparency)
+      glEnable(GL_ALPHA_TEST)
+      glAlphaFunc(GL_GREATER, 0)
+    end
     glPushMatrix
     glTranslatef(x, y, z)
       @faces.each do |object, attributes|
@@ -55,6 +60,7 @@ class ObjModel
         glEnd
       end
     glPopMatrix
+    glDisable(GL_ALPHA_TEST) if @has_transparency
   end
 end
 
@@ -98,7 +104,7 @@ end
 
 class GLTexture
   def initialize(filename)
-    gosu_image = Gosu::Image.new(filename, retro: true)
+    gosu_image = filename.is_a?(Gosu::Image) ? filename : Gosu::Image.new(filename, retro: true)
     array_of_pixels = gosu_image.to_blob
     tex_name_buf = ' ' * 4
     glGenTextures(1, tex_name_buf)
@@ -112,5 +118,14 @@ class GLTexture
 
   def get_id
     return @tex_name
+  end
+
+  def self.load_tiles(filename, width, height)
+    temp_tileset = Gosu::Image.load_tiles(filename, width, height, retro: true)
+    textures = []
+    temp_tileset.each do |tile|
+      textures.push GLTexture.new(tile)
+    end
+    return textures
   end
 end

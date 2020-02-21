@@ -3,21 +3,11 @@ class Window < Gosu::Window
     super(640, 480, false)
     self.caption = 'MINI JAM 48'
 
-    @desk = ObjModel.new('desk')
-
-    @camera = Camera.new({
-      x: 0,
-      y: 50, 
-      z: 50,
-      t_x: 0,
-      t_y: 0,
-      t_z: 0,
-      fovy: 45,
-      ratio: self.width.to_f / self.height,
-      distance: 32
-    })
+    @camera = Camera.new
 
     @hero = Hero.new
+
+    @map = Map.new
   end
 
   def needs_cursor?; true; end
@@ -28,19 +18,17 @@ class Window < Gosu::Window
 
   def update
     @hero.update
-    @camera.update(@hero.x, @hero.y, @hero.z)
+    @camera.update(@hero.x, @hero.y + 32, @hero.z)
   end
 
   def draw
     gl do
       @camera.look
-
-      @angle ||= 0
-      @angle += 1
-      glRotatef(@angle, 0, 1, 0)
-
-      @desk.draw(0, 0, -32)
-      @hero.draw(0)
+      @map.draw
+      @hero.draw(@camera.angle)
     end
+
+    @font ||= Gosu::Font.new(24)
+    @font.draw_text("FPS : #{Gosu::fps}", 10, 10, 1)
   end
 end
