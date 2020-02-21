@@ -12,6 +12,14 @@ class Hero
     @frame_time ||= 0
 
     v = 1
+
+    y_key = ([Gosu::KB_W, Gosu::KB_UP, Gosu::KB_S, Gosu::KB_DOWN].any? {|key| Gosu::button_down?(key)})
+    x_key = ([Gosu::KB_A, Gosu::KB_LEFT, Gosu::KB_D, Gosu::KB_RIGHT].any? {|key| Gosu::button_down?(key)})
+      
+    if x_key && y_key
+      v *= 0.7
+    end
+
     if Gosu::button_down?(Gosu::KB_W) or Gosu::button_down?(Gosu::KB_UP)
       @z -= v
       @frames = [3,4,3,5]
