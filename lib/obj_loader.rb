@@ -5,7 +5,7 @@ class ObjModel
     @vertices_normal = Array.new
     @faces = Hash.new
 
-    File.open(filename, 'r').readlines.each do |line|
+    File.open("gfx/models/#{filename}.obj", 'r').readlines.each do |line|
       line = line.chomp
       infos = line.split(' ')
 
@@ -39,19 +39,22 @@ class ObjModel
     @current_object = nil
   end
 
-  def draw
-    @faces.each do |object, attributes|
-      glBindTexture(GL_TEXTURE_2D, @materials.get_texture_id(attributes[:material]))
-      glBegin(GL_TRIANGLES)
-        attributes[:vertices].each do |triangle|
-          triangle.each do |vertices|
-            glTexCoord2d(@vertices_texture[vertices[1]][0], 1 - @vertices_texture[vertices[1]][1])
-            glNormal3f(*@vertices_normal[vertices[2]])
-            glVertex3f(*@vertices[vertices[0]])
+  def draw(x = 0, y = 0, z = 0)
+    glPushMatrix
+    glTranslatef(x, y, z)
+      @faces.each do |object, attributes|
+        glBindTexture(GL_TEXTURE_2D, @materials.get_texture_id(attributes[:material]))
+        glBegin(GL_TRIANGLES)
+          attributes[:vertices].each do |triangle|
+            triangle.each do |vertices|
+              glTexCoord2d(@vertices_texture[vertices[1]][0], 1 - @vertices_texture[vertices[1]][1])
+              glNormal3f(*@vertices_normal[vertices[2]])
+              glVertex3f(*@vertices[vertices[0]])
+            end
           end
-        end
-      glEnd
-    end
+        glEnd
+      end
+    glPopMatrix
   end
 end
 
@@ -59,7 +62,7 @@ class MaterialCollection
   def initialize(filename)
     @materials = Hash.new
 
-    File.open(filename, 'r').readlines.each do |line|
+    File.open("gfx/models/#{filename}", 'r').readlines.each do |line|
       line = line.chomp
       infos = line.split(' ')
 
@@ -89,7 +92,7 @@ class Material
   end
 
   def set_texture(texture_filename)
-    @texture = GLTexture.new(texture_filename)
+    @texture = GLTexture.new("gfx/models/#{texture_filename}")
   end
 end
 
