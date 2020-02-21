@@ -7,29 +7,47 @@ class Hero
   end
 
   def update
+    @frames ||= [0,1,0,2]
+    @frame ||= 0
+    @frame_time ||= 0
+
     v = 1
-    @z -= v if Gosu::button_down?(Gosu::KB_W) or Gosu::button_down?(Gosu::KB_UP)
-    @z += v if Gosu::button_down?(Gosu::KB_S) or Gosu::button_down?(Gosu::KB_DOWN)
-    @x -= v if Gosu::button_down?(Gosu::KB_A) or Gosu::button_down?(Gosu::KB_LEFT)
-    @x += v if Gosu::button_down?(Gosu::KB_D) or Gosu::button_down?(Gosu::KB_RIGHT)
+    if Gosu::button_down?(Gosu::KB_W) or Gosu::button_down?(Gosu::KB_UP)
+      @z -= v
+      @frames = [3,4,3,5]
+    end
+
+    if Gosu::button_down?(Gosu::KB_S) or Gosu::button_down?(Gosu::KB_DOWN)
+      @z += v 
+      @frames = [0,1,0,2]
+    end
+
+    if Gosu::button_down?(Gosu::KB_A) or Gosu::button_down?(Gosu::KB_LEFT)
+      @x -= v 
+      @frames = [9,10,9,11]
+    end
+
+    if Gosu::button_down?(Gosu::KB_D) or Gosu::button_down?(Gosu::KB_RIGHT)
+      @x += v
+      @frames = [6,7,6,8]
+    end
+
+    keys = [Gosu::KB_W, Gosu::KB_A, Gosu::KB_S, Gosu::KB_D, Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN]
+    unless keys.any? {|key| Gosu::button_down?(key)}
+      @frame = 0
+    else 
+      @frame_time += 1
+      if @frame_time > 8
+        @frame += 1 
+        @frame_time = 0
+        @frame = 0 if @frame > @frames.size - 1
+      end 
+    end
   end
 
   def draw(camera_angle = 0)
     glEnable(GL_ALPHA_TEST)
     glAlphaFunc(GL_GREATER, 0)
-
-    @frames = [6,7,6,8]
-    @frames = [0,1,0,2]
-    @frame ||= 0
-    @frame_time ||= 0
-
-    @frame_time += 1
-
-    if @frame_time > 10
-      @frame += 1 
-      @frame_time = 0
-      @frame = 0 if @frame > @frames.size - 1
-    end
 
     sprite = @sprites[@frames[@frame]]
 
