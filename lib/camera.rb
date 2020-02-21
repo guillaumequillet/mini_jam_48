@@ -1,7 +1,8 @@
 class Camera
   attr_reader :angle
 
-  def initialize
+  def initialize(window)
+    @window   = window
     @x        = 0
     @y        = 0
     @z        = 0
@@ -9,7 +10,6 @@ class Camera
     @t_y      = 0
     @t_z      = 0
     @fovy     = 45
-    @ratio    = (640.0 / 480.0)
     @distance = 128
     @near     = 1
     @far      = 1000
@@ -18,6 +18,8 @@ class Camera
   end
 
   def look
+    @ratio = @window.fullscreen? ? Gosu::screen_width.to_f / Gosu::screen_height : (@window.width.to_f / @window.height)
+
     glEnable(GL_TEXTURE_2D)
     glEnable(GL_DEPTH_TEST)
 

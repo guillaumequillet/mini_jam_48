@@ -3,7 +3,7 @@ class Window < Gosu::Window
     super(640, 480, false)
     self.caption = 'MINI JAM 48'
 
-    @camera = Camera.new
+    @camera = Camera.new(self)
 
     @hero = Hero.new
 
@@ -13,6 +13,7 @@ class Window < Gosu::Window
   def needs_cursor?; true; end
 
   def button_down(id)
+    super
     close! if id == Gosu::KB_ESCAPE
   end
 
