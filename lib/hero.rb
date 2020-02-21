@@ -19,6 +19,7 @@ class Hero
     glAlphaFunc(GL_GREATER, 0)
 
     @frames = [6,7,6,8]
+    @frames = [0,1,0,2]
     @frame ||= 0
     @frame_time ||= 0
 
