@@ -23,9 +23,6 @@ class Camera
     glEnable(GL_TEXTURE_2D)
     glEnable(GL_DEPTH_TEST)
 
-    glClearColor(1.0, 0.0, 1.0, 0.0)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity
     gluPerspective(@fovy, @ratio, @near, @far)
