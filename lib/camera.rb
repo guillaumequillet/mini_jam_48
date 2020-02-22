@@ -1,5 +1,5 @@
 class Camera
-  attr_reader :angle
+  attr_reader :angle, :angle_v
 
   def initialize(window)
     @window   = window

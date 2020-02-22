@@ -6,6 +6,10 @@ class Hero
     @x, @y, @z = 0, 0, 0
   end
 
+  def set_position(x, y, z)
+    @x, @y, @z = x, y, z
+  end
+
   def update
     @frames ||= [0,1,0,2]
     @frame ||= 0
@@ -53,7 +57,7 @@ class Hero
     end
   end
 
-  def draw(camera_angle = 0)
+  def draw(camera_angle = 0, camera_angle_v = 0)
     glEnable(GL_ALPHA_TEST)
     glAlphaFunc(GL_GREATER, 0)
 
@@ -63,8 +67,10 @@ class Hero
     l, r, t, b = sprite.gl_tex_info.left, sprite.gl_tex_info.right, sprite.gl_tex_info.top, sprite.gl_tex_info.bottom
     glPushMatrix
       glTranslatef(@x, @y, @z)
-      glScalef(sprite.width, sprite.height, 1)
+      glRotatef(-camera_angle_v, 1, 0, 0)
       glRotatef(90 - camera_angle, 0, 1, 0)
+      glScalef(sprite.width, sprite.height, 1)
+
       glBegin(GL_QUADS)
         glTexCoord2d(l, t); glVertex3f(-0.5, 1.0, 0.0)
         glTexCoord2d(l, b); glVertex3f(-0.5, 0.0, 0.0)

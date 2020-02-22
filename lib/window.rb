@@ -8,6 +8,7 @@ class Window < Gosu::Window
     @hero = Hero.new
 
     @map = Map.new('test')
+    @hero.set_position(*@map.get_start_position.map {|e| e * 16})
   end
 
   def needs_cursor?; true; end
@@ -19,14 +20,14 @@ class Window < Gosu::Window
 
   def update
     @hero.update
-    @camera.update(@hero.x, @hero.y + 32, @hero.z)
+    @camera.update(@hero.x, @hero.y, @hero.z)
   end
 
   def draw
     gl do
       @camera.look
       @map.draw
-      @hero.draw(@camera.angle)
+      @hero.draw(@camera.angle, @camera.angle_v)
     end
 
     @font ||= Gosu::Font.new(24)

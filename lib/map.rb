@@ -25,6 +25,9 @@ class Map
           case color
           when Gosu::Color::WHITE
             tile = 1
+          when Gosu::Color::BLUE
+            tile = 1
+            set_start_position(x, y)
           when Gosu::Color::GREEN
             tile = 1
             @models.push [:desk, x, y]
@@ -43,6 +46,14 @@ class Map
         @tiles[convert_coords_to_index(x + 1, z)] = 2
       end
     end
+  end
+
+  def set_start_position(x, z)
+    @start_position = [x, 0, z]
+  end
+
+  def get_start_position
+    @start_position
   end
 
   def convert_index_to_coords(i)
@@ -75,6 +86,24 @@ class Map
         glTexCoord2d(0, 1); glVertex3f(x, 0, z + 1)
         glTexCoord2d(1, 1); glVertex3f(x + 1, 0, z + 1)
         glTexCoord2d(1, 0); glVertex3f(x + 1, 0, z)
+      glEnd
+    end
+    glPopMatrix
+  end
+
+  def draw_roof
+    glPushMatrix
+    glScalef(@tileset[0].width, @wallset[0].height, @tileset[1].height)
+
+    @walls.each do |wall|
+      x, z = *wall
+      glBindTexture(GL_TEXTURE_2D, @tileset[0].get_id)
+
+      glBegin(GL_QUADS)
+        glTexCoord2d(0, 0); glVertex3f(x, 1, z)
+        glTexCoord2d(0, 1); glVertex3f(x, 1, z + 1)
+        glTexCoord2d(1, 1); glVertex3f(x + 1, 1, z + 1)
+        glTexCoord2d(1, 0); glVertex3f(x + 1, 1, z)
       glEnd
     end
     glPopMatrix
@@ -134,6 +163,7 @@ class Map
       @display_list = glGenLists(1)
       glNewList(@display_list, GL_COMPILE)
         draw_floor
+        draw_roof
         draw_walls
       
         @models.each do |model|
