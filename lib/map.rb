@@ -1,10 +1,12 @@
 class Map
   def initialize(filename)
-    @tileset = GLTexture.load_tiles('gfx/tileset.png', 16, 16)
-    @wallset = GLTexture.load_tiles('gfx/wallset.png', 16, 48)
+    @tile_size = 16
+    @tileset   = GLTexture.load_tiles('gfx/tileset.png', @tile_size, @tile_size)
+    @wallset   = GLTexture.load_tiles('gfx/wallset.png', @tile_size, @tile_size * 3)
 
     @assets = {
-      desk:    ObjModel.new('desk', true)
+      desk:  ObjModel.new('desk', true),
+      plant: ObjModel.new('plant', true)
     }
 
     read_file(filename)
@@ -15,6 +17,7 @@ class Map
     @tiles   = []
     @walls   = [] 
     @models  = []
+    @blocks  = []
     @minimap = Gosu::Image.new("maps/#{filename}.png", retro: true)
 
     @minimap.height.times do |y|
@@ -31,8 +34,17 @@ class Map
           when Gosu::Color::GREEN
             tile = 1
             @models.push [:desk, x, y]
+          when Gosu::Color.new(255, 113, 176, 18)
+            tile = 1
+            @models.push [:plant, x, y]
+          when Gosu::Color::RED
+            tile = 1
+            set_end_position(x, y)
           when Gosu::Color::BLACK
             @walls.push [x, y]
+            @blocks.push [x, y]
+          when Gosu::Color.new(255, 128, 128, 128)
+            @blocks.push [x, y]
           end
           @tiles[y * @minimap.width + x] = tile
         end
@@ -41,9 +53,11 @@ class Map
 
     @models.each do |model|
       shape, x, z = *model
-      if shape == :desk
+      if shape == :desk or shape == :plant
         @tiles[convert_coords_to_index(x, z)] = 2
-        @tiles[convert_coords_to_index(x + 1, z)] = 2
+        @tiles[convert_coords_to_index(x+1, z)] = 2
+        @blocks.push [x, z]
+        @blocks.push [x+1, z]
       end
     end
   end
@@ -54,6 +68,14 @@ class Map
 
   def get_start_position
     @start_position
+  end
+
+  def set_end_position(x, z)
+    @end_position = [x, 0, z]
+  end
+
+  def get_end_position
+    @end_position
   end
 
   def convert_index_to_coords(i)
@@ -173,5 +195,22 @@ class Map
       glEndList
     end
     glCallList(@display_list)
+  end
+
+  def draw_minimap(hero_x, hero_z)
+    scale    = 10
+    offset_x = 640 - scale * @minimap.width
+    offset_y = 0
+
+    # generates some MGS greenish like render
+    @minimap_render ||= Gosu::render(@minimap.width, @minimap.height, retro: true) do 
+      Gosu::draw_rect(0, 0, @minimap.width, @minimap.height, Gosu::Color.new(255, 1, 34, 23))
+      @blocks.each {|block| Gosu::draw_rect(block[0], block[1], 1, 1, Gosu::Color.new(255, 0, 236, 0))}
+    end
+
+    hero_x = (hero_x / @tile_size).floor
+    hero_z = (hero_z / @tile_size).floor
+    @minimap_render.draw(offset_x, offset_y, 0, scale, scale, Gosu::Color.new(128, 255, 255, 255))
+    Gosu::draw_rect(hero_x * scale + offset_x, hero_z * scale + offset_y, scale, scale, Gosu::Color::WHITE)
   end
 end

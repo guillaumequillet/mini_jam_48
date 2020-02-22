@@ -15,6 +15,7 @@ class Camera
     @far      = 1000
     @angle    = 90
     @angle_v  = 20
+    @height   = 32
   end
 
   def look
@@ -37,7 +38,7 @@ class Camera
     @angle_v -= 1 if Gosu::button_down?(Gosu::KB_F)
 
     @t_x = target_x
-    @t_y = target_y
+    @t_y = target_y + @height
     @t_z = target_z
 
     temp_v = Math.cos(@angle_v * Math::PI / 180.0)

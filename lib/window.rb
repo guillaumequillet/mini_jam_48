@@ -30,6 +30,8 @@ class Window < Gosu::Window
       @hero.draw(@camera.angle, @camera.angle_v)
     end
 
+    @map.draw_minimap(@hero.x, @hero.z)
+
     @font ||= Gosu::Font.new(24)
     @font.draw_text("FPS : #{Gosu::fps}", 10, 10, 1)
   end
