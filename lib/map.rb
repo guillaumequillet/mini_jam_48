@@ -21,14 +21,24 @@ class Map
         tile = nil
         unless color == transparent_color
           case color
-          when Gosu::Color.new(255, 255, 255, 255)
+          when Gosu::Color::WHITE
             tile = 1
           when Gosu::Color::GREEN
             tile = 1
             @models.push [:desk, x, y]
+          when Gosu::Color::BLACK
+
           end
           @tiles[y * @minimap.width + x] = tile
         end
+      end
+    end
+
+    @models.each do |model|
+      shape, x, z = *model
+      if shape == :desk
+        @tiles[convert_coords_to_index(x, z)] = 2
+        @tiles[convert_coords_to_index(x + 1, z)] = 2
       end
     end
   end
@@ -70,13 +80,13 @@ class Map
           glEnd
         end
         glPopMatrix
+      
+        @models.each do |model|
+          shape, x, z = *model
+          @assets[shape].draw(x * @tileset[0].width, 0, z * @tileset[0].height)
+        end
       glEndList
     end
-
     glCallList(@display_list)
-    @models.each do |model|
-      shape, x, z = *model
-      @assets[shape].draw(x * @tileset[0].width, 0, z * @tileset[0].height)
-    end
   end
 end
