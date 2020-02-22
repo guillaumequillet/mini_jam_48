@@ -84,8 +84,16 @@ class Map
     [x, y]
   end
 
+  def coords_to_tile(x, z)
+    [(x / @tile_size).floor, (z / @tile_size).floor]
+  end
+
   def convert_coords_to_index(x, y)
     @minimap.width * y + x
+  end
+
+  def collides?(x, z)
+    @blocks.include?([x, z])
   end
 
   def draw_floor
@@ -198,7 +206,7 @@ class Map
   end
 
   def draw_minimap(hero_x, hero_z)
-    scale    = 10
+    scale    = 5
     offset_x = 640 - scale * @minimap.width
     offset_y = 0
 

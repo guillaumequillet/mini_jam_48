@@ -10,12 +10,12 @@ class Hero
     @x, @y, @z = x, y, z
   end
 
-  def update
-    @frames ||= [0,1,0,2]
-    @frame ||= 0
-    @frame_time ||= 0
-
-    v = 1
+  def update(map)
+    @frames        ||= [0,1,0,2]
+    @frame         ||= 0
+    @frame_time    ||= 0
+    v              = 1
+    half_hero_size = 8
 
     y_key = ([Gosu::KB_W, Gosu::KB_UP, Gosu::KB_S, Gosu::KB_DOWN].any? {|key| Gosu::button_down?(key)})
     x_key = ([Gosu::KB_A, Gosu::KB_LEFT, Gosu::KB_D, Gosu::KB_RIGHT].any? {|key| Gosu::button_down?(key)})
@@ -25,25 +25,34 @@ class Hero
     end
 
     if Gosu::button_down?(Gosu::KB_W) or Gosu::button_down?(Gosu::KB_UP)
-      @z -= v
-      @frames = [3,4,3,5]
+      unless (map.collides?(*map.coords_to_tile(@x, @z - v - half_hero_size)))
+        @z -= v
+        @frames = [3,4,3,5]
+      end
     end
 
     if Gosu::button_down?(Gosu::KB_S) or Gosu::button_down?(Gosu::KB_DOWN)
-      @z += v 
-      @frames = [0,1,0,2]
+      unless (map.collides?(*map.coords_to_tile(@x, @z + v + half_hero_size)))
+        @z += v 
+        @frames = [0,1,0,2]
+      end
     end
 
     if Gosu::button_down?(Gosu::KB_A) or Gosu::button_down?(Gosu::KB_LEFT)
-      @x -= v 
-      @frames = [9,10,9,11]
+      unless (map.collides?(*map.coords_to_tile(@x - v - half_hero_size, @z)))
+        @x -= v 
+        @frames = [9,10,9,11]
+      end
     end
 
     if Gosu::button_down?(Gosu::KB_D) or Gosu::button_down?(Gosu::KB_RIGHT)
-      @x += v
-      @frames = [6,7,6,8]
+      unless (map.collides?(*map.coords_to_tile(@x + v + half_hero_size, @z)))
+        @x += v
+        @frames = [6,7,6,8]
+      end
     end
 
+    # animation
     keys = [Gosu::KB_W, Gosu::KB_A, Gosu::KB_S, Gosu::KB_D, Gosu::KB_LEFT, Gosu::KB_RIGHT, Gosu::KB_UP, Gosu::KB_DOWN]
     unless keys.any? {|key| Gosu::button_down?(key)}
       @frame = 0

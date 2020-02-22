@@ -19,7 +19,7 @@ class Window < Gosu::Window
   end
 
   def update
-    @hero.update
+    @hero.update(@map)
     @camera.update(@hero.x, @hero.y, @hero.z)
   end
 
