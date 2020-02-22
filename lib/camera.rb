@@ -14,7 +14,7 @@ class Camera
     @near     = 1
     @far      = 1000
     @angle    = 90
-    @angle_v  = 20
+    @angle_v  = 14
     @height   = 32
   end
 

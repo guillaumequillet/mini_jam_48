@@ -5,8 +5,10 @@ class Map
     @wallset   = GLTexture.load_tiles('gfx/wallset.png', @tile_size, @tile_size * 3)
 
     @assets = {
-      desk:  ObjModel.new('desk', true),
-      plant: ObjModel.new('plant', true)
+      desk:              ObjModel.new('desk', true),
+      plant:             ObjModel.new('plant', true),
+      fire_extinguisher: ObjModel.new('fire_extinguisher', true),
+      coffee:            ObjModel.new('coffee')
     }
 
     read_file(filename)
@@ -37,6 +39,12 @@ class Map
           when Gosu::Color.new(255, 113, 176, 18)
             tile = 1
             @models.push [:plant, x, y]
+          when Gosu::Color.new(255, 237, 128, 143)
+            tile = 1
+            @models.push [:fire_extinguisher, x, y]
+          when Gosu::Color.new(255, 117, 126, 133)
+            tile = 1
+            @models.push [:coffee, x, y]
           when Gosu::Color::RED
             tile = 1
             set_end_position(x, y)
@@ -53,11 +61,14 @@ class Map
 
     @models.each do |model|
       shape, x, z = *model
-      if shape == :desk or shape == :plant
+      if shape == :desk or shape == :plant or shape == :coffee
         @tiles[convert_coords_to_index(x, z)] = 2
         @tiles[convert_coords_to_index(x+1, z)] = 2
         @blocks.push [x, z]
         @blocks.push [x+1, z]
+      elsif shape == :fire_extinguisher
+        @tiles[convert_coords_to_index(x, z)] = 2
+        @blocks.push [x, z]
       end
     end
   end
