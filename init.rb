@@ -13,5 +13,7 @@ require_relative 'lib/hero.rb'
 require_relative 'lib/map.rb'
 require_relative 'lib/camera.rb'
 require_relative 'lib/window.rb'
+require_relative 'lib/ennemy.rb'
+require_relative 'lib/ennemy_turning.rb'
 
 Window.new.show

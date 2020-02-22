@@ -40,13 +40,14 @@ class ObjModel
     @current_object = nil
   end
 
-  def draw(x = 0, y = 0, z = 0)
+  def draw(x = 0, y = 0, z = 0, rot_y = 0)
     if (@has_transparency)
       glEnable(GL_ALPHA_TEST)
       glAlphaFunc(GL_GREATER, 0)
     end
     glPushMatrix
     glTranslatef(x, y, z)
+    glRotatef(rot_y, 0, 1, 0) if rot_y != 0
       @faces.each do |object, attributes|
         glBindTexture(GL_TEXTURE_2D, @materials.get_texture_id(attributes[:material]))
         glBegin(GL_TRIANGLES)

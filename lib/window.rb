@@ -7,7 +7,7 @@ class Window < Gosu::Window
 
     @hero = Hero.new
 
-    @map = Map.new('test')
+    @map = Map.new(self, 'test')
     @hero.set_position(*@map.get_start_position.map {|e| e * 16})
   end
 
@@ -18,7 +18,13 @@ class Window < Gosu::Window
     close! if id == Gosu::KB_ESCAPE
   end
 
+  def game_over
+    self.caption = "game over"
+  end
+
   def update
+    self.caption = ""
+    @map.update(@hero.x, @hero.z)
     @hero.update(@map)
     @camera.update(@hero.x, @hero.y, @hero.z)
   end

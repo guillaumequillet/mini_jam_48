@@ -1,5 +1,8 @@
 class Map
-  def initialize(filename)
+  attr_reader :tile_size
+
+  def initialize(window, filename)
+    @window    = window
     @tile_size = 16
     @tileset   = GLTexture.load_tiles('gfx/tileset.png', @tile_size, @tile_size)
     @wallset   = GLTexture.load_tiles('gfx/wallset.png', @tile_size, @tile_size * 3)
@@ -8,7 +11,8 @@ class Map
       desk:              ObjModel.new('desk', true),
       plant:             ObjModel.new('plant', true),
       fire_extinguisher: ObjModel.new('fire_extinguisher', true),
-      coffee:            ObjModel.new('coffee')
+      coffee:            ObjModel.new('coffee'),
+      chair:             ObjModel.new('chair', true)
     }
 
     read_file(filename)
@@ -16,11 +20,12 @@ class Map
 
   def read_file(filename)
     transparent_color = Gosu::Color.new(255, 255, 0, 255)
-    @tiles   = []
-    @walls   = [] 
-    @models  = []
-    @blocks  = []
-    @minimap = Gosu::Image.new("maps/#{filename}.png", retro: true)
+    @tiles    = []
+    @walls    = [] 
+    @models   = []
+    @blocks   = []
+    @ennemies = []
+    @minimap  = Gosu::Image.new("maps/#{filename}.png", retro: true)
 
     @minimap.height.times do |y|
       @minimap.width.times do |x|
@@ -39,6 +44,9 @@ class Map
           when Gosu::Color.new(255, 113, 176, 18)
             tile = 1
             @models.push [:plant, x, y]
+          when Gosu::Color.new(255, 173, 173, 173)
+            tile = 1
+            @models.push [:chair, x, y]
           when Gosu::Color.new(255, 237, 128, 143)
             tile = 1
             @models.push [:fire_extinguisher, x, y]
@@ -48,9 +56,16 @@ class Map
           when Gosu::Color::RED
             tile = 1
             set_end_position(x, y)
+          # ennemies
+          when Gosu::Color.new(255, 127, 0, 55)
+            tile = 3
+            @ennemies.push(TurningEnnemy.new(self, x, y))
+            @blocks.push [x, y]
+          # walls
           when Gosu::Color::BLACK
             @walls.push [x, y]
             @blocks.push [x, y]
+          # invisible walls
           when Gosu::Color.new(255, 128, 128, 128)
             @blocks.push [x, y]
           end
@@ -61,13 +76,13 @@ class Map
 
     @models.each do |model|
       shape, x, z = *model
-      if shape == :desk or shape == :plant or shape == :coffee
+      if shape == :desk || shape == :plant || shape == :coffee
         @tiles[convert_coords_to_index(x, z)] = 2
         @tiles[convert_coords_to_index(x+1, z)] = 2
         @blocks.push [x, z]
         @blocks.push [x+1, z]
-      elsif shape == :fire_extinguisher
-        @tiles[convert_coords_to_index(x, z)] = 2
+      elsif shape == :fire_extinguisher || shape == :chair
+        @tiles[convert_coords_to_index(x, z)] = 3
         @blocks.push [x, z]
       end
     end
@@ -199,6 +214,15 @@ class Map
     glColor3ub(255, 255, 255)
   end
 
+  def update(hero_x, hero_z)
+    @ennemies.each do|ennemy| 
+      ennemy.update
+      if ennemy.sees_hero?(hero_x, hero_z)
+        @window.game_over
+      end
+    end
+  end
+
   def draw
     unless defined?(@display_list)
       @display_list = glGenLists(1)
@@ -214,6 +238,7 @@ class Map
       glEndList
     end
     glCallList(@display_list)
+    @ennemies.each {|ennemy| ennemy.draw}
   end
 
   def draw_minimap(hero_x, hero_z)
@@ -231,5 +256,9 @@ class Map
     hero_z = (hero_z / @tile_size).floor
     @minimap_render.draw(offset_x, offset_y, 0, scale, scale, Gosu::Color.new(128, 255, 255, 255))
     Gosu::draw_rect(hero_x * scale + offset_x, hero_z * scale + offset_y, scale, scale, Gosu::Color::WHITE)
+
+    @ennemies.each do |ennemy| 
+      Gosu::draw_rect(ennemy.x * scale + offset_x, ennemy.z * scale + offset_y, scale, scale, Gosu::Color::RED)
+    end
   end
 end
