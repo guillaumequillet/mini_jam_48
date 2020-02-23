@@ -2,6 +2,6 @@ crédits :
 
 validate sound "click2" : Sebastian / http://soundbible.com/
 alert sound "Text Message Alert 1" : Daniel Simion  / http://soundbible.com/
-music : Hydro Gene
+music : HydroGene
 
 NatZ

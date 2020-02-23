@@ -5,6 +5,7 @@ class Window < Gosu::Window
     @font        = Gosu::Font.new(40)
     @keystates   = {}
     @title       = Gosu::Image.new('gfx/title.png', retro: true)
+    @infos       = Gosu::Image.new('gfx/infos.png', retro: true)
     @end_screen  = Gosu::Image.new('gfx/game_over.png', retro: true)
     @win_screen  = Gosu::Image.new('gfx/game_finished.png', retro: true)
     @state       = :title
@@ -36,8 +37,6 @@ class Window < Gosu::Window
   end
 
   def next_level
-    p "next_level"
-
     @score += 500
 
     levels = Dir.entries('maps/').select {|e| e.include?('.png')}
@@ -60,7 +59,6 @@ class Window < Gosu::Window
   end
 
   def game_over
-    p "game over"
     @alert_sound.play
     @score -= 100
     @state = :game_over
@@ -80,10 +78,20 @@ class Window < Gosu::Window
       if @keystates[Gosu::KB_RETURN]
         @keystates[Gosu::KB_RETURN] = false
         @click_sound.play
+        @state = :infos
+      end
+    when :infos
+      @blink_time ||= 0
+      @blink_time += 1
+      @blink_time = 0 if @blink_time > 100
+
+      if @keystates[Gosu::KB_RETURN]
+        @keystates[Gosu::KB_RETURN] = false
+        @click_sound.play
         @timer = Time.now
         @score = 0
         load_game
-      end
+      end      
     when :game_over
       @blink_time ||= 0
       @blink_time += 1
@@ -118,6 +126,12 @@ class Window < Gosu::Window
       if @blink_time < 50
         @font.draw_text("Press Enter to Start", 20, 430, 1)
         @font.draw_text("Press Enter to Start", 21, 431, 0, 1, 1, Gosu::Color::BLACK)
+      end
+    when :infos
+      @infos.draw(0, 0, 0)
+      if @blink_time < 50
+        @font.draw_text("Press Enter to Start", 20, 430, 1, 1, 1, Gosu::Color::BLACK)
+        @font.draw_text("Press Enter to Start", 21, 431, 0, 1, 1, Gosu::Color::WHITE)
       end
     when :game_over
       @end_screen.draw(0, 0, 0)
