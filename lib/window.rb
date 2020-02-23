@@ -17,8 +17,6 @@ class Window < Gosu::Window
   end
 
   def load_game
-    @level = 5
-
     @camera = Camera.new(self)
     @hero   = Hero.new
     @map    = Map.new(self, "level_#{@level}")
