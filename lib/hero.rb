@@ -2,8 +2,11 @@ class Hero
   attr_reader :x, :y, :z
 
   def initialize
-    @sprites = Gosu::Image.load_tiles("gfx/sprites/hero.png", 32, 32, retro: true)
-    @x, @y, @z = 0, 0, 0
+    @sprites    = Gosu::Image.load_tiles("gfx/sprites/hero.png", 32, 32, retro: true)
+    @x, @y, @z  = 0, 0, 0
+    @frames     = [0,1,0,2]
+    @frame      = 0
+    @frame_time = 0
   end
 
   def set_position(x, y, z)
@@ -11,9 +14,6 @@ class Hero
   end
 
   def update(map)
-    @frames        ||= [0,1,0,2]
-    @frame         ||= 0
-    @frame_time    ||= 0
     v              = 1
     half_hero_size = 8
 

@@ -112,6 +112,16 @@ class Map
     @end_position
   end
 
+  def reached_end_position?(hero_x, hero_z)
+    hero_tile_x = (hero_x / 16.0).floor
+    hero_tile_z = (hero_z / 16.0).floor
+    if hero_tile_x == get_end_position[0] && hero_tile_z == get_end_position[2]
+      @window.next_level
+      return true
+    end
+    return false
+  end
+
   def convert_index_to_coords(i)
     y = i / @minimap.width
     x = i % @minimap.width
@@ -223,10 +233,16 @@ class Map
   end
 
   def update(hero_x, hero_z)
-    @ennemies.each do|ennemy| 
-      ennemy.update
-      if ennemy.sees_hero?(hero_x, hero_z)
-        @window.game_over
+    # did we reach the end of the level ?
+    has_reached_end = reached_end_position?(hero_x, hero_z)
+
+    unless has_reached_end
+      @ennemies.each do|ennemy| 
+        ennemy.update
+        if ennemy.sees_hero?(hero_x, hero_z)
+          p "from ennemy #{ennemy.class}"
+          @window.game_over
+        end
       end
     end
   end

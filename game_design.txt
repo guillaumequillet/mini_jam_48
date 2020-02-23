@@ -1,33 +1,3 @@
-MINI JAM 48
-Theme : Team Work
+crédits :
 
-Limitation : The player(s) can not attack!
-This means that the player(s) can not inflict pain, damage or harm anything. This includes inanimate objects.
-Remember that this only limits things the player has control over.
-
-infiltration
-
-un salarié veut discuter d'une augmentation avec son patron, qui se cache dans son bureau
-on doit réussir à aller voir ce patron sans se faire repérer et sans blesser qui que ce soit, ni rien casser
-
-travail d'équipe : demander à collegue de distraire
-
-
-technique : mini map
-3D ?
-pathfinding ?
-
-maps faites sous images
-
-reste à modéliser :
-armoires
-plantes
-poteaux
-chaise
-boite carton à la MGS
-
-reste à texturer :
-murs 
-paravents
-
-
+validate sound "click2" : Sebastian / http://soundbible.com/
