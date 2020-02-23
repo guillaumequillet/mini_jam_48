@@ -23,7 +23,7 @@ class SecretaryEnnemy < Ennemy
     hero_tile_z = (hero_z / 16.0).floor
 
     if (@sprite == 2)
-      if hero_tile_x >= @x - @tiles_range && hero_tile_x <= @x + @tiles_range
+      if hero_tile_x >= @x - @tiles_range / 2 && hero_tile_x <= @x + @tiles_range / 2
         if hero_tile_z > @z && hero_tile_z <= @z + @tiles_range  
           return true
         end
