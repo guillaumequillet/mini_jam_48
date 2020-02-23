@@ -8,6 +8,7 @@ class Map
     @wallset   = GLTexture.load_tiles('gfx/wallset.png', @tile_size, @tile_size * 3)
 
     @assets = {
+      exit:              ObjModel.new('exit', true),
       desk:              ObjModel.new('desk', true),
       desk2:             ObjModel.new('desk2', true),
       plant:             ObjModel.new('plant', true),
@@ -16,6 +17,7 @@ class Map
       chair:             ObjModel.new('chair', true)
     }
 
+    @exit_angle = 0
     read_file(filename)
   end
 
@@ -244,6 +246,9 @@ class Map
           @window.game_over
         end
       end
+
+      @exit_angle += 3
+      @exit_angle = 0 if @exit_angle > 360
     end
   end
 
@@ -263,6 +268,12 @@ class Map
     end
     glCallList(@display_list)
     @ennemies.each {|ennemy| ennemy.draw}
+    draw_exit
+  end
+
+  def draw_exit
+    x, y, z = *get_end_position
+    @assets[:exit].draw((x + 0.5) * @tile_size, 8, (z + 0.5) * @tile_size, @exit_angle)
   end
 
   def draw_minimap(hero_x, hero_z)

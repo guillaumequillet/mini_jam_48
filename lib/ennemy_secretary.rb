@@ -4,7 +4,7 @@ class SecretaryEnnemy < Ennemy
     @chair        = ObjModel.new('chair', true)
     @sprites      = GLTexture.load_tiles('gfx/sprites/secretary_newspaper.png', 32, 32) 
     @sprite       = 0
-    @tiles_range  = 4
+    @tiles_range  = 3
   end
 
   def update

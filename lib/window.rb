@@ -6,6 +6,7 @@ class Window < Gosu::Window
     @keystates   = {}
     @title       = Gosu::Image.new('gfx/title.png', retro: true)
     @end_screen  = Gosu::Image.new('gfx/game_over.png', retro: true)
+    @win_screen  = Gosu::Image.new('gfx/game_finished.png', retro: true)
     @state       = :title
     @level       = 1
     @click_sound = Gosu::Sample.new('sfx/Click2-Sebastian-759472264.wav')
@@ -112,7 +113,7 @@ class Window < Gosu::Window
         @font.draw_text("Press Enter to Retry", 21, 431, 0, 1, 1, Gosu::Color::BLACK)
       end     
     when :game_finished
-      @font.draw_text("Congratulations ! You got your raise !", 40, 40, 0, 2, 2)
+      @win_screen.draw(0, 0, 0)
       if @blink_time < 50
         @font.draw_text("Press Enter to Restart", 20, 430, 1)
         @font.draw_text("Press Enter to Restart", 21, 431, 0, 1, 1, Gosu::Color::BLACK)
