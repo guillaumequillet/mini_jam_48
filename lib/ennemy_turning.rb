@@ -6,7 +6,7 @@ class TurningEnnemy < Ennemy
     @sprite       = 0
     @sprite_angle = 0
     @rot_speed    = 2
-    @tiles_range  = 3
+    @tiles_range  = 2
   end
 
   def update

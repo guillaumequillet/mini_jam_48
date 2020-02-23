@@ -4,14 +4,14 @@ class SecretaryEnnemy < Ennemy
     @chair        = ObjModel.new('chair', true)
     @sprites      = GLTexture.load_tiles('gfx/sprites/secretary_newspaper.png', 32, 32) 
     @sprite       = 0
-    @tiles_range  = 3
+    @tiles_range  = 4
   end
 
   def update
     @frame_time ||= 0
 
     @frame_time += 1
-    if (@frame_time > 100)
+    if (@frame_time > 50)
       @sprite += 1
       @frame_time = 0
       @sprite = 0 if @sprite > @sprites.size - 1
@@ -23,7 +23,7 @@ class SecretaryEnnemy < Ennemy
     hero_tile_z = (hero_z / 16.0).floor
 
     if (@sprite == 2)
-      if hero_tile_x >= @x - @tiles_range / 2 && hero_tile_x <= @x + @tiles_range / 2
+      if hero_tile_x == @x
         if hero_tile_z > @z && hero_tile_z <= @z + @tiles_range  
           return true
         end

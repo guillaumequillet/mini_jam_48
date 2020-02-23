@@ -13,12 +13,12 @@ class Window < Gosu::Window
     @click_sound = Gosu::Sample.new('sfx/Click2-Sebastian-759472264.wav')
     @alert_sound = Gosu::Sample.new('sfx/sms-alert-1-daniel_simon.wav')
     @music       = Gosu::Song.new('sfx/TeamWork_MiniJam.ogg')
-    @music.play
+    # @music.play(true)
   end
 
   def load_game
     # temp
-    @level = 3
+    @level = 5
 
     @camera = Camera.new(self)
     @hero   = Hero.new
@@ -133,8 +133,8 @@ class Window < Gosu::Window
     when :infos
       @infos.draw(0, 0, 0)
       if @blink_time < 50
-        @font.draw_text("Press Enter to Start", 20, 430, 1, 1, 1, Gosu::Color::BLACK)
-        @font.draw_text("Press Enter to Start", 21, 431, 0, 1, 1, Gosu::Color::WHITE)
+        @font.draw_text("Press Enter to Start", 20, 430, 1)
+        @font.draw_text("Press Enter to Start", 21, 431, 0, 1, 1, Gosu::Color::BLACK)
       end
     when :game_over
       @end_screen.draw(0, 0, 0)
@@ -145,7 +145,9 @@ class Window < Gosu::Window
     when :game_finished
       @win_screen.draw(0, 0, 0)
       @font.draw_text("Gain  : #{@score} BigCoins", 40, 40, 1)
+      @font.draw_text("Gain  : #{@score} BigCoins", 41, 41, 0, 1, 1, Gosu::Color::BLACK)
       @font.draw_text("Time  : #{@final_time}", 40, 80, 1)
+      @font.draw_text("Time  : #{@final_time}", 41, 81, 1, 0, 1, Gosu::Color::BLACK)
 
       if @blink_time < 50
         @font.draw_text("Press Enter to Restart", 20, 430, 1)
