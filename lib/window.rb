@@ -13,11 +13,10 @@ class Window < Gosu::Window
     @click_sound = Gosu::Sample.new('sfx/Click2-Sebastian-759472264.wav')
     @alert_sound = Gosu::Sample.new('sfx/sms-alert-1-daniel_simon.wav')
     @music       = Gosu::Song.new('sfx/TeamWork_MiniJam.ogg')
-    # @music.play(true)
+    @music.play(true)
   end
 
   def load_game
-    # temp
     @level = 5
 
     @camera = Camera.new(self)

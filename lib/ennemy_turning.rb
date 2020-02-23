@@ -5,7 +5,7 @@ class TurningEnnemy < Ennemy
     @sprites      = GLTexture.load_tiles('gfx/sprites/ennemy_turning.png', 32, 32) 
     @sprite       = 0
     @sprite_angle = 0
-    @rot_speed    = 2
+    @rot_speed    = 1.5
     @tiles_range  = 2
   end
 
