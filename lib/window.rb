@@ -10,6 +10,9 @@ class Window < Gosu::Window
     @state       = :title
     @level       = 1
     @click_sound = Gosu::Sample.new('sfx/Click2-Sebastian-759472264.wav')
+    @alert_sound = Gosu::Sample.new('sfx/sms-alert-1-daniel_simon.wav')
+    @music       = Gosu::Song.new('sfx/TeamWork_MiniJam.ogg')
+    @music.play
   end
 
   def load_game
@@ -35,12 +38,18 @@ class Window < Gosu::Window
   def next_level
     p "next_level"
 
+    @score += 500
+
     levels = Dir.entries('maps/').select {|e| e.include?('.png')}
 
     if @level + 1 <= levels.size
       @level += 1
       load_game
     else
+      diff_time = Time.now - @timer
+      mins = (diff_time / 60).floor
+      secs = (diff_time - (mins * 60)).floor
+      @final_time = "#{mins} min and #{secs} seconds"
       game_finished
     end
   end
@@ -52,6 +61,8 @@ class Window < Gosu::Window
 
   def game_over
     p "game over"
+    @alert_sound.play
+    @score -= 100
     @state = :game_over
   end
 
@@ -69,6 +80,8 @@ class Window < Gosu::Window
       if @keystates[Gosu::KB_RETURN]
         @keystates[Gosu::KB_RETURN] = false
         @click_sound.play
+        @timer = Time.now
+        @score = 0
         load_game
       end
     when :game_over
@@ -114,6 +127,9 @@ class Window < Gosu::Window
       end     
     when :game_finished
       @win_screen.draw(0, 0, 0)
+      @font.draw_text("Score : #{@score}", 40, 40, 1)
+      @font.draw_text("Time  : #{@final_time}", 40, 80, 1)
+
       if @blink_time < 50
         @font.draw_text("Press Enter to Restart", 20, 430, 1)
         @font.draw_text("Press Enter to Restart", 21, 431, 0, 1, 1, Gosu::Color::BLACK)

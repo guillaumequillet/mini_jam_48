@@ -34,8 +34,8 @@ class Camera
   end
 
   def update(target_x, target_y, target_z)
-    @angle_v += 1 if Gosu::button_down?(Gosu::KB_R)
-    @angle_v -= 1 if Gosu::button_down?(Gosu::KB_F)
+    # @angle_v += 1 if Gosu::button_down?(Gosu::KB_R)
+    # @angle_v -= 1 if Gosu::button_down?(Gosu::KB_F)
 
     @t_x = target_x
     @t_y = target_y + @height
