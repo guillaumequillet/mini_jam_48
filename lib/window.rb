@@ -7,7 +7,7 @@ class Window < Gosu::Window
 
     @hero = Hero.new
 
-    @map = Map.new(self, 'test')
+    @map = Map.new(self, 'test2')
     @hero.set_position(*@map.get_start_position.map {|e| e * 16})
   end
 

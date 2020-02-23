@@ -15,5 +15,6 @@ require_relative 'lib/camera.rb'
 require_relative 'lib/window.rb'
 require_relative 'lib/ennemy.rb'
 require_relative 'lib/ennemy_turning.rb'
+require_relative 'lib/ennemy_secretary.rb'
 
 Window.new.show

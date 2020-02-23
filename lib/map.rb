@@ -9,6 +9,7 @@ class Map
 
     @assets = {
       desk:              ObjModel.new('desk', true),
+      desk2:             ObjModel.new('desk2', true),
       plant:             ObjModel.new('plant', true),
       fire_extinguisher: ObjModel.new('fire_extinguisher', true),
       coffee:            ObjModel.new('coffee'),
@@ -41,6 +42,9 @@ class Map
           when Gosu::Color::GREEN
             tile = 1
             @models.push [:desk, x, y]
+          when Gosu::Color.new(255, 64, 255, 64)
+            tile = 1
+            @models.push [:desk2, x, y]
           when Gosu::Color.new(255, 113, 176, 18)
             tile = 1
             @models.push [:plant, x, y]
@@ -61,6 +65,10 @@ class Map
             tile = 3
             @ennemies.push(TurningEnnemy.new(self, x, y))
             @blocks.push [x, y]
+          when Gosu::Color.new(255, 255, 216, 0)
+            tile = 3
+            @ennemies.push(SecretaryEnnemy.new(self, x, y))
+            @blocks.push [x, y]
           # walls
           when Gosu::Color::BLACK
             @walls.push [x, y]
@@ -76,7 +84,7 @@ class Map
 
     @models.each do |model|
       shape, x, z = *model
-      if shape == :desk || shape == :plant || shape == :coffee
+      if shape == :desk || shape == :desk2 || shape == :plant || shape == :coffee
         @tiles[convert_coords_to_index(x, z)] = 2
         @tiles[convert_coords_to_index(x+1, z)] = 2
         @blocks.push [x, z]
