@@ -2,7 +2,7 @@ class Window < Gosu::Window
   def initialize
     super(640, 480, false)
     self.caption = 'BBB - MINI JAM 48'
-    @font        = Gosu::Font.new(40)
+    @font        = Gosu::Font.new(40, name: 'font/Copperplate Gothic Bold Regular.ttf')
     @keystates   = {}
     @title       = Gosu::Image.new('gfx/title.png', retro: true)
     @infos       = Gosu::Image.new('gfx/infos.png', retro: true)
@@ -13,7 +13,7 @@ class Window < Gosu::Window
     @click_sound = Gosu::Sample.new('sfx/Click2-Sebastian-759472264.wav')
     @alert_sound = Gosu::Sample.new('sfx/sms-alert-1-daniel_simon.wav')
     @music       = Gosu::Song.new('sfx/TeamWork_MiniJam.ogg')
-    @music.play
+    # @music.play
   end
 
   def load_game
